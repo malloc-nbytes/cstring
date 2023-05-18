@@ -3,11 +3,11 @@
 
 int main(void) {
   Cstring cs = cstring_alloc("t");
-
-  for (int i = 0; i < 1000; i++) {
-    cstring_push(&cs, 'a');
-  }
   cstring_print(&cs);
+
+  /* for (int i = 0; i < 1000; i++) { */
+  /*   cstring_push(&cs, 'a'); */
+  /* } */
 
   cstring_from(&cs, "Hello world!");
   cstring_print(&cs);
