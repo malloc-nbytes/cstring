@@ -32,7 +32,7 @@ void cstring_push(Cstring *cs, char c) {
   cs->data[cs->sz++] = c;
 }
 
-void cstring_dump(const Cstring *cs) {
+void cstring_print(const Cstring *cs) {
   printf("%s\n", cs->data);
 }
 

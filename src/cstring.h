@@ -8,7 +8,7 @@ typedef struct {
 } Cstring;
 
 Cstring cstring_alloc(char *init);
-void cstring_dump(const Cstring *cs);
+void cstring_print(const Cstring *cs);
 void cstring_push(Cstring *cs, char c);
 void cstring_trim(Cstring *cs);
 void cstring_free(Cstring *cs);
