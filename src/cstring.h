@@ -13,11 +13,13 @@ void cstring_push(Cstring *cs, char c);
 void cstring_trim(Cstring *cs);
 void cstring_free(Cstring *cs);
 void cstring_del_idx(Cstring *cs, int idx);
-void cstring_pop_front(Cstring *cs);
-void cstring_pop(Cstring *cs);
+char cstring_pop_front(Cstring *cs);
+char cstring_pop(Cstring *cs);
 size_t cstring_cap(const Cstring *cs);
 size_t cstring_len(const Cstring *cs);
-char cstring_get_char(Cstring *cs, int idx);
+char cstring_at(Cstring *cs, int idx);
 void cstring_from(Cstring *cs, char *data);
+Cstring cstring_copy(Cstring *cs);
+size_t cstring_cap(const Cstring *cs);
 
 #endif // CSTRING_H

@@ -50,18 +50,26 @@ void cstring_del_idx(Cstring *cs, int idx) {
   shift_elems_left(cs, idx);
 }
 
-void cstring_pop(Cstring *cs) {
+char cstring_pop(Cstring *cs) {
   if (!cs->sz) {
-    return;
+    return '\0';
   }
+  char save = cs->data[cs->sz - 1];
   cs->data[--(cs->sz)] = '\0';
+  return save;
 }
 
-void cstring_pop_front(Cstring *cs) {
+char cstring_pop_front(Cstring *cs) {
   if (!cs->sz) {
-    return;
+    return '\0';
   }
+  char save = cs->data[0];
   shift_elems_left(cs, 0);
+  return save;
+}
+
+int cstring_empty(const Cstring *cs) {
+  return cs->sz == 0;
 }
 
 size_t cstring_cap(const Cstring *cs) {
@@ -72,11 +80,15 @@ size_t cstring_len(const Cstring *cs) {
   return cs->sz;
 }
 
-char cstring_get_char(Cstring *cs, int idx) {
+char cstring_at(Cstring *cs, int idx) {
   if (idx < 0 || idx >= cs->sz) {
     return '\0';
   }
   return cs->data[idx];
+}
+
+Cstring cstring_copy(Cstring *cs) {
+  return cstring_alloc(cs->data);
 }
 
 void cstring_trim(Cstring *cs) {
@@ -96,7 +108,6 @@ void cstring_from(Cstring *cs, char *data) {
     cstring_free(cs);
   }
   cs->data = s_malloc(sizeof(char) * 2);
-  /* cs->data[0] = '\0'; */
   memset(cs->data, '\0', sizeof(cs->data[0]) * 2);
   cs->cap = 1;
   cs->sz = 0;
