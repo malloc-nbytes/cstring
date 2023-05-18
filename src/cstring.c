@@ -95,9 +95,10 @@ void cstring_from(Cstring *cs, char *data) {
   if (cs->sz > 0) {
     cstring_free(cs);
   }
-  cs->data = s_malloc(sizeof(char));
-  cs->data[0] = '\0';
-  cs->cap = 1;
+  cs->data = s_malloc(sizeof(char) * 2);
+  /* cs->data[0] = '\0'; */
+  memset(cs->data, '\0', sizeof(cs->data[0]) * 2);
+  cs->cap = 2;
   cs->sz = 0;
   if (data) {
     for (int i = 0; data[i] != '\0'; i++) {

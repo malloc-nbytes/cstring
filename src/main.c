@@ -2,7 +2,11 @@
 #include "cstring.h"
 
 int main(void) {
-  Cstring cs = cstring_alloc("This is a test");
+  Cstring cs = cstring_alloc("t");
+
+  for (int i = 0; i < 1000; i++) {
+    cstring_push(&cs, 'a');
+  }
   cstring_print(&cs);
 
   cstring_from(&cs, "Hello world!");
