@@ -36,17 +36,18 @@ void cstring_dump(const Cstring *cs) {
   printf("%s\n", cs->data);
 }
 
-void cstring_del_idx(Cstring *cs, int idx) {
-  if (idx < 0 || idx >= cs->sz) {
-    return;
-  }
-  ;
-}
-
 void shift_elems_left(Cstring *cs, int start) {
   for (size_t i = start; i < cs->sz - 1; i++) {
     cs->data[i] = cs->data[i + 1];
   }
+  cs->data[--(cs->sz)] = '\0';
+}
+
+void cstring_del_idx(Cstring *cs, int idx) {
+  if (idx < 0 || idx >= cs->sz) {
+    return;
+  }
+  shift_elems_left(cs, idx);
 }
 
 void cstring_pop(Cstring *cs) {
@@ -61,7 +62,6 @@ void cstring_pop_front(Cstring *cs) {
     return;
   }
   shift_elems_left(cs, 0);
-  cs->data[--(cs->sz)] = '\0';
 }
 
 size_t cstring_cap(const Cstring *cs) {
@@ -69,7 +69,7 @@ size_t cstring_cap(const Cstring *cs) {
 }
 
 size_t cstring_len(const Cstring *cs) {
-  return cs->sz - 1;
+  return cs->sz;
 }
 
 char cstring_get_char(Cstring *cs, int idx) {
@@ -92,6 +92,9 @@ void cstring_trim(Cstring *cs) {
 }
 
 void cstring_from(Cstring *cs, char *data) {
+  if (cs->sz > 0) {
+    cstring_free(cs);
+  }
   cs->data = s_malloc(sizeof(char));
   cs->data[0] = '\0';
   cs->cap = 1;
@@ -104,7 +107,7 @@ void cstring_from(Cstring *cs, char *data) {
 }
 
 Cstring cstring_alloc(char *init) {
-  Cstring cs;
+  Cstring cs = { 0 };
   cstring_from(&cs, init);
   return cs;
 }
