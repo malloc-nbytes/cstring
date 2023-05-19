@@ -21,5 +21,7 @@ char cstring_at(Cstring *cs, int idx);
 void cstring_from(Cstring *cs, char *data);
 Cstring cstring_copy(Cstring *cs);
 size_t cstring_cap(const Cstring *cs);
+char *cstring_to_cstr(Cstring *cs);
+void cstring_numerics(Cstring *cs, int *data, int *sz);
 
 #endif // CSTRING_H

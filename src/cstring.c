@@ -1,5 +1,6 @@
 #include <errno.h>
 #include <stdio.h>
+#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 #include "cstring.h"
@@ -89,6 +90,29 @@ char cstring_at(Cstring *cs, int idx) {
 
 Cstring cstring_copy(Cstring *cs) {
   return cstring_alloc(cs->data);
+}
+
+char *cstring_to_cstr(Cstring *cs) {
+  char *data = s_malloc(cs->sz + 1);
+  strcpy(data, cs->data);
+  return data;
+}
+
+void cstring_numerics(Cstring *cs, int *data, int *sz) {
+  *sz = 0;
+  char buff[10];
+  memset(buff, '\0', 10);
+  int buff_sz = 0;
+  for (size_t i = 0; i < cs->sz; i++) {
+    if (isdigit(cs->data[i])) {
+      buff[buff_sz++] = cs->data[i];
+    } else if (buff_sz > 0) {
+      data[*sz] = atoi(buff);
+      *sz += 1;
+      buff_sz = 0;
+      memset(buff, '\0', 10);
+    }
+  }
 }
 
 void cstring_trim(Cstring *cs) {
