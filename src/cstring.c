@@ -152,6 +152,9 @@ char *cstring_substr(Cstring *cs, char *substr) {
       return res;
     }
   }
+  if (cstring_len(&buff) > 0) {
+    cstring_free(&buff);
+  }
   return NULL;
 }
 
