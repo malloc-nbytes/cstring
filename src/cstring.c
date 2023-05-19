@@ -98,13 +98,28 @@ char *cstring_to_cstr(Cstring *cs) {
   return data;
 }
 
-void cstring_numerics(Cstring *cs, int *data, int *sz) {
+void cstring_reverse(Cstring *cs) {
+  int start = 0, tmp, end = cs->sz - 1;
+  while (start < end) {
+    tmp = cs->data[start];
+    cs->data[start] = cs->data[end];
+    cs->data[end] = tmp;
+    start += 1;
+    end -= 1;
+  }
+}
+
+void cstring_numerics(Cstring *cs, int *data, size_t *sz) {
   *sz = 0;
   char buff[10];
   memset(buff, '\0', 10);
   int buff_sz = 0;
   for (size_t i = 0; i < cs->sz; i++) {
     if (isdigit(cs->data[i])) {
+      if (buff_sz == 10) {
+        fprintf(stderr, "ERROR: numbers in Cstring must not exceed 10 digits.\n");
+        exit(EXIT_FAILURE);
+      }
       buff[buff_sz++] = cs->data[i];
     } else if (buff_sz > 0) {
       data[*sz] = atoi(buff);
@@ -113,6 +128,31 @@ void cstring_numerics(Cstring *cs, int *data, int *sz) {
       memset(buff, '\0', 10);
     }
   }
+}
+
+char *cstring_substr(Cstring *cs, char *substr) {
+  Cstring buff = cstring_alloc(NULL);
+  int ptr = 0;
+  size_t n = strlen(substr);
+  for (int i = 0; i < cs->sz; i++) {
+    char c = cs->data[i];
+    if (c == substr[ptr]) {
+      cstring_push(&buff, c);
+      ptr += 1;
+    } else {
+      i -= ptr;
+      ptr = 0;
+      if (cstring_len(&buff) > 0) {
+        cstring_from(&buff, "");
+      }
+    }
+    if (cstring_len(&buff) == n) {
+      char *res = cstring_to_cstr(&buff);
+      cstring_free(&buff);
+      return res;
+    }
+  }
+  return NULL;
 }
 
 void cstring_trim(Cstring *cs) {

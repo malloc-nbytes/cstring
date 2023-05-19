@@ -22,6 +22,8 @@ void cstring_from(Cstring *cs, char *data);
 Cstring cstring_copy(Cstring *cs);
 size_t cstring_cap(const Cstring *cs);
 char *cstring_to_cstr(Cstring *cs);
-void cstring_numerics(Cstring *cs, int *data, int *sz);
+void cstring_numerics(Cstring *cs, int *data, size_t *sz);
+void cstring_reverse(Cstring *cs);
+char *cstring_substr(Cstring *cs, char *substr);
 
 #endif // CSTRING_H
