@@ -3,7 +3,5 @@
 #include "cstring.h"
 
 int main(void) {
-
-
   return 0;
 }
