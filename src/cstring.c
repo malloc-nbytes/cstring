@@ -81,13 +81,17 @@ size_t cstring_len(const Cstring *cs) {
   return cs->sz;
 }
 
+int cstring_empty(const Cstring *cs) {
+  return !cs->sz;
+}
+
 char cstring_at(Cstring *cs, int idx) {
   if (idx < 0 || idx >= cs->sz) {
     return '\0';
   }
   return cs->data[idx];
 }
-
+ 
 Cstring cstring_copy(Cstring *cs) {
   return cstring_alloc(cs->data);
 }
