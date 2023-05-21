@@ -185,6 +185,16 @@ void cstring_from(Cstring *cs, char *data) {
   }
 }
 
+int cstring_has_substr(Cstring *cs, char *substr) {
+  // TODO: do not use the implemented substr function.
+  char *res = cstring_substr(cs, substr);
+  if (!res) {
+    return 0;
+  }
+  free(res);
+  return 1;
+}
+
 int *cstring_to_ascii(Cstring *cs, size_t *sz) {
   *sz = 0;
   int *res = s_malloc(sizeof(int) * cs->sz);
@@ -222,6 +232,14 @@ void cstring_delall_char(Cstring *cs, char del) {
   }
 }
 
+int cstring_eq_cstring(const Cstring *cs, const Cstring *cs2) {
+  return strcmp(cs->data, cs2->data);
+}
+
+int cstring_eq_cstr(const Cstring *cs, const char *data) {
+    return strcmp(cs->data, data);
+}
+
 Cstring cstring_create(char *init) {
   Cstring cs = { 0 };
   cstring_from(&cs, init);
@@ -233,5 +251,4 @@ void cstring_free(Cstring *cs) {
   cs->cap = 0;
   cs->sz = 0;
 }
-
 

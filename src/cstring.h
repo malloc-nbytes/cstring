@@ -11,6 +11,9 @@ Cstring cstring_create(char *init);
 Cstring cstring_copy(Cstring *cs);
 
 int cstring_contains_char(Cstring *cs, char data);
+int cstring_has_substr(Cstring *cs, char *substr);
+int cstring_eq_cstring(const Cstring *cs, const Cstring *cs2);
+int cstring_eq_cstr(const Cstring *cs, const char *data);
 
 void cstring_print(const Cstring *cs);
 void cstring_push(Cstring *cs, char c);

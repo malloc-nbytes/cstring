@@ -6,7 +6,7 @@ int main(void) {
 
   Cstring cs = cstring_create("Hello World!");
 
-  
+  cstring_free(&cs);
 
   return 0;
 }
