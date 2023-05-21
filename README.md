@@ -5,15 +5,15 @@
 ### Creation
 `Cstring cstring_create(char *init);`
 
-Create a new `Cstring` object.
+    Create a new `Cstring` object.
 
 `Cstring cstring_from_file(FILE *fp);`
 
-Create a new `Cstring` object from file text.
+    Create a new `Cstring` object from file text.
 
 `Cstring cstring_copy(Cstring *cs);`
 
-Create a new `Cstring` object from another `Cstring`.
+    Create a new `Cstring` object from another `Cstring`.
 
 ### Query
 
