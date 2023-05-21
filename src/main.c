@@ -4,9 +4,8 @@
 
 int main(void) {
 
-  FILE *fp = fopen("input.txt", "r");
-  Cstring cs = cstring_from_file(fp);
-  fclose(fp);
+  Cstring cs = cstring_create("!!!!!");
+  cstring_delall_str(&cs, "");
 
   cstring_print(&cs);
 

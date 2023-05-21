@@ -7,6 +7,10 @@ typedef struct {
   size_t cap;
 } Cstring;
 
+// New
+void cstring_append(Cstring *cs, char *data);
+void cstring_delall_str(Cstring *cs, char *remove);
+
 Cstring cstring_create(char *init);
 Cstring cstring_from_file(FILE *fp);
 Cstring cstring_copy(Cstring *cs);
@@ -33,7 +37,7 @@ char cstring_pop_front(Cstring *cs);
 char cstring_pop(Cstring *cs);
 char cstring_at(Cstring *cs, int idx);
 char *cstring_to_cstr(Cstring *cs);
-char *cstring_substr(Cstring *cs, char *substr);
+char *cstring_substr(Cstring *cs, char *substr, size_t *len);
 char *cstring_slice_iter(const Cstring *cs, char delim, size_t *sz);
 
 size_t cstring_cap(const Cstring *cs);

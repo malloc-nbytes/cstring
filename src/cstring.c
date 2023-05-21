@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 #include "cstring.h"
 
 void *s_malloc(size_t nbytes) {
@@ -130,7 +131,7 @@ void cstring_numerics(Cstring *cs, int *data, size_t *sz) {
   }
 }
 
-char *cstring_substr(Cstring *cs, char *substr) {
+char *cstring_substr(Cstring *cs, char *substr, size_t *len) {
   Cstring buff = cstring_create(NULL);
   int ptr = 0;
   size_t n = strlen(substr);
@@ -147,14 +148,16 @@ char *cstring_substr(Cstring *cs, char *substr) {
       }
     }
     if (cstring_len(&buff) == n) {
-      char *res = cstring_to_cstr(&buff);
-      cstring_free(&buff);
+      // Return the start of the substr.
+      char *res = &cs->data[i + 1 - n];
+      *len = n;
       return res;
     }
   }
   if (cstring_len(&buff) > 0) {
     cstring_free(&buff);
   }
+  *len = -1;
   return NULL;
 }
 
@@ -186,13 +189,9 @@ void cstring_from(Cstring *cs, char *data) {
 }
 
 int cstring_has_substr(Cstring *cs, char *substr) {
-  // TODO: do not use the implemented substr function.
-  char *res = cstring_substr(cs, substr);
-  if (!res) {
-    return 0;
-  }
-  free(res);
-  return 1;
+  size_t len;
+  (void) cstring_substr(cs, substr, &len);
+  return len != -1;
 }
 
 int *cstring_to_ascii(Cstring *cs, size_t *sz) {
@@ -275,6 +274,29 @@ char *cstring_slice_iter(const Cstring *cs, char delim, size_t *sz) {
     }
   }
   return slice;
+}
+
+void cstring_delall_str(Cstring *cs, char *remove) {
+  if (!strlen(remove)) {
+    return;
+  }
+
+  size_t len;
+  do {
+    char *substr = cstring_substr(cs, remove, &len);
+    if (len != -1) {
+      int idx = substr - cs->data;
+      for (size_t i = 0; i < len; i++) {
+        cstring_del_idx(cs, idx);
+      }
+    }
+  } while (len != -1);
+}
+
+void cstring_append(Cstring *cs, char *data) {
+  for (size_t i = 0; data[i] != '\0'; i++) {
+    cstring_push(cs, data[i]);
+  }
 }
 
 Cstring cstring_create(char *init) {
