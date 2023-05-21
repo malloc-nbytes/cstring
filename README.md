@@ -2,6 +2,8 @@
 # Provides a string struct with helpful functions.
 ## Functions Overview
 
+WIP. Below definitions may be incorrect
+
 ### Creation
 
     Cstring cstring_create(char *init);
