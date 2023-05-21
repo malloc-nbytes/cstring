@@ -7,17 +7,23 @@ typedef struct {
   size_t cap;
 } Cstring;
 
-Cstring cstring_alloc(char *init);
+Cstring cstring_create(char *init);
 Cstring cstring_copy(Cstring *cs);
+
+int cstring_contains_char(Cstring *cs, char data);
 
 void cstring_print(const Cstring *cs);
 void cstring_push(Cstring *cs, char c);
 void cstring_trim(Cstring *cs);
 void cstring_free(Cstring *cs);
-void cstring_del_idx(Cstring *cs, int idx);
 void cstring_from(Cstring *cs, char *data);
 void cstring_numerics(Cstring *cs, int *data, size_t *sz);
 void cstring_reverse(Cstring *cs);
+void cstring_del_idx(Cstring *cs, int idx);
+void cstring_delall_char(Cstring *cs, char del);
+void cstring_delfst_char(Cstring *cs, char del);
+
+int *cstring_to_ascii(Cstring *cs, size_t *sz);
 
 char cstring_pop_front(Cstring *cs);
 char cstring_pop(Cstring *cs);

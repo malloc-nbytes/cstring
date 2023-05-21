@@ -4,9 +4,9 @@
 
 int main(void) {
 
+  Cstring cs = cstring_create("Hello World!");
 
-
-
+  
 
   return 0;
 }

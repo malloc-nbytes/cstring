@@ -81,10 +81,6 @@ size_t cstring_len(const Cstring *cs) {
   return cs->sz;
 }
 
-int cstring_empty(const Cstring *cs) {
-  return !cs->sz;
-}
-
 char cstring_at(Cstring *cs, int idx) {
   if (idx < 0 || idx >= cs->sz) {
     return '\0';
@@ -93,7 +89,7 @@ char cstring_at(Cstring *cs, int idx) {
 }
  
 Cstring cstring_copy(Cstring *cs) {
-  return cstring_alloc(cs->data);
+  return cstring_create(cs->data);
 }
 
 char *cstring_to_cstr(Cstring *cs) {
@@ -135,7 +131,7 @@ void cstring_numerics(Cstring *cs, int *data, size_t *sz) {
 }
 
 char *cstring_substr(Cstring *cs, char *substr) {
-  Cstring buff = cstring_alloc(NULL);
+  Cstring buff = cstring_create(NULL);
   int ptr = 0;
   size_t n = strlen(substr);
   for (int i = 0; i < cs->sz; i++) {
@@ -189,7 +185,44 @@ void cstring_from(Cstring *cs, char *data) {
   }
 }
 
-Cstring cstring_alloc(char *init) {
+int *cstring_to_ascii(Cstring *cs, size_t *sz) {
+  *sz = 0;
+  int *res = s_malloc(sizeof(int) * cs->sz);
+  for (size_t i = 0; i < cs->sz; i++) {
+    res[*sz] = cs->data[i];
+    *sz += 1;
+  }
+  return res;
+}
+
+int cstring_contains_char(Cstring *cs, char data) {
+  for (size_t i = 0; i < cs->sz; i++) {
+    if (cs->data[i] == data) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
+void cstring_delfst_char(Cstring *cs, char del) {
+  for (size_t i = 0; i < cs->sz; i++) {
+    if (cs->data[i] == del) {
+      cstring_del_idx(cs, i);
+      break;
+    }
+  }
+}
+
+void cstring_delall_char(Cstring *cs, char del) {
+  for (size_t i = 0; i < cs->sz; i++) {
+    if (cs->data[i] == del) {
+      cstring_del_idx(cs, i);
+      i -= 1;
+    }
+  }
+}
+
+Cstring cstring_create(char *init) {
   Cstring cs = { 0 };
   cstring_from(&cs, init);
   return cs;
