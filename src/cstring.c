@@ -93,9 +93,10 @@ Cstring cstring_copy(Cstring *cs) {
   return cstring_create(cs->data);
 }
 
-char *cstring_to_cstr(Cstring *cs) {
+char *cstring_to_cstr(Cstring *cs, size_t *len) {
   char *data = s_malloc(cs->sz + 1);
   strcpy(data, cs->data);
+  *len = cs->sz;
   return data;
 }
 
