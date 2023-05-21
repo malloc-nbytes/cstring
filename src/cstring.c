@@ -232,12 +232,49 @@ void cstring_delall_char(Cstring *cs, char del) {
   }
 }
 
+Cstring cstring_from_file(FILE *fp) {
+  Cstring cs = cstring_create(NULL);
+  char *buffer = 0;
+  long length;
+
+  if (fp) {
+    fseek(fp, 0, SEEK_END);
+    length = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+    buffer = s_malloc(length);
+    if (buffer) {
+      fread(buffer, 1, length, fp);
+    }
+  }
+
+  if (buffer) {
+    for (long i = 0; i < length; i++) {
+      cstring_push(&cs, buffer[i]);
+    }
+    free(buffer);
+  }
+
+  return cs;
+}
+
 int cstring_eq_cstring(const Cstring *cs, const Cstring *cs2) {
   return strcmp(cs->data, cs2->data);
 }
 
 int cstring_eq_cstr(const Cstring *cs, const char *data) {
     return strcmp(cs->data, data);
+}
+
+char *cstring_slice_iter(const Cstring *cs, char delim, size_t *sz) {
+  char *slice = NULL;
+  for (size_t i = 0; i < cs->sz; i++) {
+    if (cs->data[i] == delim) {
+      slice = &cs->data[i];
+      *sz = cs->sz - i;
+      break;
+    }
+  }
+  return slice;
 }
 
 Cstring cstring_create(char *init) {

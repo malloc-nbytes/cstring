@@ -8,6 +8,7 @@ typedef struct {
 } Cstring;
 
 Cstring cstring_create(char *init);
+Cstring cstring_from_file(FILE *fp);
 Cstring cstring_copy(Cstring *cs);
 
 int cstring_contains_char(Cstring *cs, char data);
@@ -33,6 +34,7 @@ char cstring_pop(Cstring *cs);
 char cstring_at(Cstring *cs, int idx);
 char *cstring_to_cstr(Cstring *cs);
 char *cstring_substr(Cstring *cs, char *substr);
+char *cstring_slice_iter(const Cstring *cs, char delim, size_t *sz);
 
 size_t cstring_cap(const Cstring *cs);
 size_t cstring_len(const Cstring *cs);
