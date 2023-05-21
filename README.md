@@ -62,30 +62,59 @@ Check to see if a Cstring is emtpy.
 
     void cstring_push(Cstring *cs, char c);
 
+Push a char into the Cstring.
+
     char cstring_pop_front(Cstring *cs);
+
+Remove the top-most character in the Cstring.
 
     char cstring_pop(Cstring *cs);
 
+Remove the bottom-most character in the Cstring.
+
     void cstring_trim(Cstring *cs);
+
+Remove all trailing whitespace in the Cstring.
 
     void cstring_from(Cstring *cs, char *data);
 
+Set the data in the Cstring to a given string. This also acts as a clear() function. Just provide it with "".
+
     void cstring_reverse(Cstring *cs);
+
+Reverse the characters in the Cstring.
 
     void cstring_del_idx(Cstring *cs, int idx);
 
+Delete a character at a given index.
+
     void cstring_delall_char(Cstring *cs, char del);
+
+Delete all characters that match del.
 
     void cstring_delfst_char(Cstring *cs, char del);
 
+Delete the first occurrence of del.
+
     char *cstring_to_cstr(Cstring *cs);
+
+Convert a Cstring to char *.
 
     char *cstring_substr(Cstring *cs, char *substr);
 
+Return a alloc'd char * that consists of the given substring. NULL if not found.
+
     void cstring_free(Cstring *cs);
+
+Free the Cstring.
 
 ### Other
 
     int *cstring_to_ascii(Cstring *cs, size_t *sz);
 
+Turn all characters in the Cstring to int * ascii characters.
+
     void cstring_print(const Cstring *cs);
+
+Print the characters of the Cstring.
+
