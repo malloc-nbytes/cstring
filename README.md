@@ -6,7 +6,7 @@
 
     Cstring cstring_create(char *init);
 
-Create a new Cstring object.
+Create a new Cstring object. If init is NULL or "", there will be no characters initialized.
 
     Cstring cstring_from_file(FILE *fp);
 
