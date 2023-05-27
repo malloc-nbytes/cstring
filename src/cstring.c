@@ -195,7 +195,7 @@ int cstring_has_substr(Cstring *cs, char *substr) {
   return len != -1;
 }
 
-int *cstring_to_ascii(Cstring *cs, size_t *sz) {
+int *cstring_to_atoi(Cstring *cs, size_t *sz) {
   *sz = 0;
   int *res = s_malloc(sizeof(int) * cs->sz);
   for (size_t i = 0; i < cs->sz; i++) {
@@ -265,6 +265,36 @@ int cstring_eq_cstr(const Cstring *cs, const char *data) {
     return strcmp(cs->data, data);
 }
 
+Cstring cstring_from_range(Cstring *cs, int start, int end) {
+  Cstring res = cstring_create(NULL);
+  for (int i = start; i < end; i++) {
+    cstring_push(&res, cs->data[i]);
+  }
+  return res;
+}
+
+Cstring *cstring_split(Cstring *cs, char delim, size_t *sz) {
+  Cstring *res = s_malloc(sizeof(Cstring) * 32);
+  *sz = 0;
+
+  int ptr = 0;
+
+  for (size_t i = 0; i < cs->sz; i++) {
+    char c = cs->data[i];
+    if (c == delim) {
+      res[*sz] = cstring_from_range(cs, ptr, i);
+      *sz += 1;
+      i += 1;
+      ptr = i;
+    }
+  }
+
+  res[*sz] = cstring_from_range(cs, ptr, cs->sz);
+  *sz += 1;
+
+  return res;
+}
+
 char *cstring_slice_iter(const Cstring *cs, char delim, size_t *sz) {
   char *slice = NULL;
   for (size_t i = 0; i < cs->sz; i++) {
@@ -304,6 +334,16 @@ Cstring cstring_create(char *init) {
   Cstring cs = { 0 };
   cstring_from(&cs, init);
   return cs;
+}
+
+void cstring_swap_idx(Cstring *cs, int idx1, int idx2) {
+  if ((idx1 < 0 || idx1 >= cs->sz) || (idx2 < 0 || idx2 >= cs->sz)) {
+    fprintf(stderr, "ERROR: indices must be within the size of the cstring\n");
+    exit(EXIT_FAILURE);
+  }
+  char tmp = cs->data[idx1];
+  cs->data[idx1] = cs->data[idx2];
+  cs->data[idx2] = tmp;
 }
 
 void cstring_free(Cstring *cs) {

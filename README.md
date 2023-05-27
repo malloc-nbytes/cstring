@@ -2,121 +2,263 @@
 # Provides a string struct with helpful functions.
 ## Functions Overview
 
-WIP. Below definitions may be incorrect
+Create a new `Cstring`. When given NULL or "", no data will be added.
+```
+Cstring cstring_create(char *init);
+```
 
-### Creation
+Init a `Cstring` from file contents. File must be opened and closed from caller.
+```
+Cstring cstring_from_file(FILE *fp);
+```
 
-    Cstring cstring_create(char *init);
+Changes the contents of a `Cstring`. If given "", it essentially acts as a clear() function.
+```
+void cstring_from(Cstring *cs, char *data);
+```
 
-Create a new Cstring object. If init is NULL or "", there will be no characters initialized.
+Print the contents.
+```
+void cstring_print(const Cstring *cs);
+```
 
-    Cstring cstring_from_file(FILE *fp);
+Free memory.
+```
+void cstring_free(Cstring *cs);
+```
 
-Create a new Cstring object from file text.
+Append a string.
+```
+void cstring_append(Cstring *cs, char *data);
+```
 
-    Cstring cstring_copy(Cstring *cs);
+Remove leading and trailing whitespace.
+```
+void cstring_trim(Cstring *cs);
+```
 
-Create a new Cstring object from another Cstring.
+Returns a new `Cstring` that is a direct copy of a given `Cstring`.
+```
+Cstring cstring_copy(Cstring *cs);
+```
 
-### Query
+Reverse characters.
+```
+void cstring_reverse(Cstring *cs);
+```
 
-    int cstring_contains_char(Cstring *cs, char data);
+Push a character.
+```
+void cstring_push(Cstring *cs, char c);
+```
 
-Checks to see if a Cstring contains a char.
+Pop the front character.
+```
+char cstring_pop_front(Cstring *cs);
+```
 
-    int cstring_has_substr(Cstring *cs, char *substr);
+Pop the last character.
+```
+char cstring_pop(Cstring *cs);
+```
 
-Checks to see if a Cstring contains a substring.
+Swap the character at `idx1` with `idx2`.
+```
+void cstring_swap_idx(Cstring *cs, int idx1, int idx2);
+```
 
-    int cstring_eq_cstring(const Cstring *cs, const Cstring *cs2);
+Remove all occurrences of `remove`. Nothing will happen when given an empty string.
+```
+void cstring_delall_str(Cstring *cs, char *remove);
+```
 
-Compares two Cstrings together.
+Delete a character at a given idx.
+```
+void cstring_del_idx(Cstring *cs, int idx);
+```
 
-    int cstring_eq_cstr(const Cstring *cs, const char *data);
+Delete all characters matching `del`.
+```
+void cstring_delall_char(Cstring *cs, char del);
+```
 
-Compares a Cstring and a char *.
+Delete the first character matching `del`.
+```
+void cstring_delfst_char(Cstring *cs, char del);
+```
 
-    void cstring_numerics(Cstring *cs, int *data, size_t *sz);
+See if a character is present. 1 on success, 0 on failure.
+```
+int cstring_contains_char(Cstring *cs, char data);
+```
 
-Return a list of numbers that are contained in the Cstring. Data must be alloc'd and free'd by caller.
+Checks to see if a `Cstring` contains a given substring. 1 on success, 0 on failure.
+```
+int cstring_has_substr(Cstring *cs, char *substr);
+```
 
-    char cstring_at(Cstring *cs, int idx);
+Get a pointer to the start of a substring. This function will alter the value in `len` to give the substring's length.
+```
+char *cstring_substr(Cstring *cs, char *substr, size_t *len);
+```
 
-Return the char at an index.
+strcmp() on two `Cstring`'s.
+```
+int cstring_eq_cstring(const Cstring *cs, const Cstring *cs2);
+```
 
-    char *cstring_slice_iter(const Cstring *cs, char delim, size_t *sz);
+strcmp() on a `Cstring` and a char *.
+```
+int cstring_eq_cstr(const Cstring *cs, const char *data);
+```
 
-Given a delimiter, will return a pointer to the first character after the first location of the delimiter.
+Extract all numbers. Numbers that have more than 10 digits are not accepted.
+```
+void cstring_numerics(Cstring *cs, int *data, size_t *sz);
+```
 
-    size_t cstring_cap(const Cstring *cs);
+Create a new array of integers that are the ascii equivalent in the `Cstring`.
+```
+int *cstring_to_atoi(Cstring *cs, size_t *sz);
+```
 
-Return the Cstring capacity.
+Get a character at a given index.
+```
+char cstring_at(Cstring *cs, int idx);
+```
 
-    size_t cstring_len(const Cstring *cs);
+Convert a `Cstring` to char *.
+```
+char *cstring_to_cstr(Cstring *cs, size_t *len);
+```
 
-Return the Cstring length.
+Return a pointer to the character `delim`. This function will alter the value in `len` to give the resulting pointer length.
+```
+char *cstring_slice_iter(const Cstring *cs, char delim, size_t *sz);
+```
 
-    int cstring_empty(const Cstring *cs);
+Return an array of `Cstring`s split on `delim`. This function will alter the value in `len` to give the resulting pointer length.
+```
+Cstring *cstring_split(Cstring *cs, char delim, size_t *sz);
+```
 
-Check to see if a Cstring is emtpy.
+Create a new `Cstring` from a range of characters in `cs` starting from `start` and ending at `end` - 1.
+```
+Cstring cstring_from_range(Cstring *cs, int start, int end);
+```
 
-### Modification
+Get the `Cstring` capacity.
+```
+size_t cstring_cap(const Cstring *cs);
+```
 
-    void cstring_push(Cstring *cs, char c);
+Get the `Cstring` length.
+```
+size_t cstring_len(const Cstring *cs);
+```
 
-Push a char into the Cstring.
+Check to see if a `Cstring` is empty.
+```
+int cstring_empty(const Cstring *cs);
+```
 
-    char cstring_pop_front(Cstring *cs);
+## Example
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include "cstring.h"
 
-Remove the top-most character in the Cstring.
+void cstring_example() {
+  Cstring cs = cstring_create("Hello");
 
-    char cstring_pop(Cstring *cs);
+  // --- Append --- //
 
-Remove the bottom-most character in the Cstring.
+  cstring_append(&cs, " world!");
+  cstring_print(&cs); // Prints "Hello world!"
 
-    void cstring_trim(Cstring *cs);
+  // --- Delete All Strings --- //
 
-Remove all trailing whitespace in the Cstring.
+  cstring_from(&cs, "hello world hello world");
+  cstring_delall_str(&cs, " world");
+  cstring_print(&cs); // Prints "hello hello"
 
-    void cstring_from(Cstring *cs, char *data);
+  // --- Push --- //
 
-Set the data in the Cstring to a given string. This also acts as a clear() function. Just provide it with "".
+  cstring_push(&cs, '!');
+  cstring_print(&cs); // Prints "hello hello!"
 
-    void cstring_reverse(Cstring *cs);
+  // --- Trim --- //
 
-Reverse the characters in the Cstring.
+  cstring_from(&cs, "    Hello world!    ");
+  cstring_trim(&cs);
+  cstring_print(&cs); // Prints "Hello world!"
 
-    void cstring_del_idx(Cstring *cs, int idx);
+  // --- Reverse --- //
 
-Delete a character at a given index.
+  cstring_reverse(&cs);
+  cstring_print(&cs); // Prints "!dlrow olleH"
+  cstring_reverse(&cs);
 
-    void cstring_delall_char(Cstring *cs, char del);
+  // --- Delete All Chars --- //
 
-Delete all characters that match del.
+  cstring_delall_char(&cs, 'l');
+  cstring_print(&cs); // Prints "Heo word!"
 
-    void cstring_delfst_char(Cstring *cs, char del);
+  // --- Clear --- //
 
-Delete the first occurrence of del.
+  cstring_from(&cs, ""); // Clears `cs`.
+  cstring_append(&cs, "Hello World!");
 
-    char *cstring_to_cstr(Cstring *cs);
+  // --- Pop --- //
 
-Convert a Cstring to char *.
+  for (int i = 0; i < 4; i++)
+    (void)cstring_pop_front(&cs);
+  cstring_print(&cs); // Prints "o World!"
 
-    char *cstring_substr(Cstring *cs, char *substr);
+  // --- Substring --- //
 
-Return a alloc'd char * that consists of the given substring. NULL if not found.
+  cstring_from(&cs, "Hello world!");
 
-    void cstring_free(Cstring *cs);
+  size_t len;
+  char *substr_ptr = cstring_substr(&cs, "or", &len);
 
-Free the Cstring.
+  // Prints "or"
+  for (size_t i = 0; i < len; i++)
+    putchar(substr_ptr[i]);
+  putchar('\n');
 
-### Other
+  // --- Slicing --- //
 
-    int *cstring_to_ascii(Cstring *cs, size_t *sz);
+  char *slice = cstring_slice_iter(&cs, ' ', &len);
 
-Turn all characters in the Cstring to int * ascii characters.
+  // Prints " world!"
+  for (size_t i = 0; i < len; i++)
+    putchar(slice[i]);
+  putchar('\n');
 
-    void cstring_print(const Cstring *cs);
+  // --- Split --- //
 
-Print the characters of the Cstring.
+  cstring_from(&cs, "This is a test string for splitting.");
+  Cstring *splits = cstring_split(&cs, ' ', &len);
+  for (size_t i = 0; i < len; i++) {
+    cstring_print(&splits[i]);
+    cstring_free(&splits[i]);
+  }
+  // Prints:
+  /* This
+     is
+     a
+     test
+     string
+     for
+     slicing. */
 
+  free(splits);
+  cstring_free(&cs);
+}
+
+int main(void) {
+  cstring_example();
+  return 0;
+}
+```
