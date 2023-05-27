@@ -6,6 +6,27 @@
 #include <assert.h>
 #include "cstring.h"
 
+#define PANIC(msg, stream)                              \
+  fprintf(stream, "PANIC: %s in [%s:%d] %s()\n",        \
+          msg, __FILE__, __LINE__, __FUNCTION__);       \
+  exit(1);                                              \
+
+#define TODO(msg, stream)                               \
+  fprintf(stream, "TODO: %s in [%s:%d] %s()\n",         \
+          msg, __FILE__, __LINE__, __FUNCTION__);       \
+  exit(1);                                              \
+
+#define UNIMPLEMENTED(msg, stream)                              \
+  fprintf(stream, "UNIMPLEMENTED: %s in [%s:%d] %s()\n",        \
+          msg, __FILE__, __LINE__, __FUNCTION__);               \
+  exit(1);                                                      \
+
+#define SWAP(a, b) do {                         \
+    typeof(a) tmp = (a);                        \
+    (a) = (b);                                  \
+    (b) = tmp;                                  \
+  } while (0)
+
 void *s_malloc(size_t nbytes) {
   void *p = malloc(nbytes);
   if (!p) {
@@ -129,8 +150,7 @@ void cstring_numerics(Cstring *cs, int *data, size_t *sz) {
   for (size_t i = 0; i < cs->sz; i++) {
     if (isdigit(cs->data[i])) {
       if (buff_sz == 10) {
-        fprintf(stderr, "ERROR: numbers in Cstring must not exceed 10 digits.\n");
-        exit(EXIT_FAILURE);
+        PANIC("numbers in Cstring must not exceed 10 digits.\n", stderr);
       }
       buff[buff_sz++] = cs->data[i];
     } else if (buff_sz > 0) {
@@ -272,7 +292,7 @@ int cstring_eq_cstring(const Cstring *cs, const Cstring *cs2) {
 }
 
 int cstring_eq_cstr(const Cstring *cs, const char *data) {
-    return strcmp(cs->data, data);
+  return strcmp(cs->data, data);
 }
 
 Cstring cstring_from_range(Cstring *cs, int start, int end) {
@@ -293,12 +313,10 @@ Cstring *cstring_split(Cstring *cs, char delim, size_t *sz) {
   for (size_t i = 0; i < cs->sz; i++) {
     char c = cs->data[i];
     if (c == delim) {
-
       if (*sz >= cap) {
         cap *= 2;
-        res = s_realloc(res, sizeof(Cstring) * cap);
+        res = s_realloc(res, sizeof(res[0]) * cap);
       }
-
       res[*sz] = cstring_from_range(cs, ptr, i);
       *sz += 1;
       i += 1;
@@ -355,12 +373,12 @@ Cstring cstring_create(char *init) {
 
 void cstring_swap_idx(Cstring *cs, int idx1, int idx2) {
   if ((idx1 < 0 || idx1 >= cs->sz) || (idx2 < 0 || idx2 >= cs->sz)) {
-    fprintf(stderr, "ERROR: indices must be within the size of the cstring\n");
-    exit(EXIT_FAILURE);
+    PANIC("indices must be within the size of the cstring\n", stderr);
   }
-  char tmp = cs->data[idx1];
-  cs->data[idx1] = cs->data[idx2];
-  cs->data[idx2] = tmp;
+  SWAP(cs->data[idx1], cs->data[idx2]);
+  /* char tmp = cs->data[idx1]; */
+  /* cs->data[idx1] = cs->data[idx2]; */
+  /* cs->data[idx2] = tmp; */
 }
 
 void cstring_free(Cstring *cs) {
