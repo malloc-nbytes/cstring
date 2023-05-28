@@ -1,37 +1,38 @@
+#include "cstring.h"
+#include <assert.h>
+#include <ctype.h>
 #include <errno.h>
 #include <stdio.h>
-#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
-#include "cstring.h"
 
-#define PANIC(msg, stream)                              \
-  fprintf(stream, "PANIC: %s in [%s:%d] %s()\n",        \
-          msg, __FILE__, __LINE__, __FUNCTION__);       \
-  exit(1);                                              \
+#define PANIC(msg, stream)                                                     \
+  fprintf(stream, "PANIC: %s in [%s:%d] %s()\n", msg, __FILE__, __LINE__,      \
+          __FUNCTION__);                                                       \
+  exit(1);
 
-#define TODO(msg, stream)                               \
-  fprintf(stream, "TODO: %s in [%s:%d] %s()\n",         \
-          msg, __FILE__, __LINE__, __FUNCTION__);       \
-  exit(1);                                              \
+#define TODO(msg, stream)                                                      \
+  fprintf(stream, "TODO: %s in [%s:%d] %s()\n", msg, __FILE__, __LINE__,       \
+          __FUNCTION__);                                                       \
+  exit(1);
 
-#define UNIMPLEMENTED(msg, stream)                              \
-  fprintf(stream, "UNIMPLEMENTED: %s in [%s:%d] %s()\n",        \
-          msg, __FILE__, __LINE__, __FUNCTION__);               \
-  exit(1);                                                      \
+#define UNIMPLEMENTED(msg, stream)                                             \
+  fprintf(stream, "UNIMPLEMENTED: %s in [%s:%d] %s()\n", msg, __FILE__,        \
+          __LINE__, __FUNCTION__);                                             \
+  exit(1);
 
-#define SWAP(a, b) do {                         \
-    typeof(a) tmp = (a);                        \
-    (a) = (b);                                  \
-    (b) = tmp;                                  \
+#define SWAP(a, b)                                                             \
+  do {                                                                         \
+    typeof(a) tmp = (a);                                                       \
+    (a) = (b);                                                                 \
+    (b) = tmp;                                                                 \
   } while (0)
 
 void *s_malloc(size_t nbytes) {
   void *p = malloc(nbytes);
   if (!p) {
-    fprintf(stderr, "ERROR: failed to allocate %zu bytes. Reason: %s\n",
-            nbytes, strerror(errno));
+    fprintf(stderr, "ERROR: failed to allocate %zu bytes. Reason: %s\n", nbytes,
+            strerror(errno));
     exit(EXIT_FAILURE);
   }
   return p;
@@ -65,9 +66,7 @@ void cstring_push(Cstring *cs, char c) {
   cs->data[cs->sz++] = c;
 }
 
-void cstring_print(const Cstring *cs) {
-  printf("%s\n", cs->data);
-}
+void cstring_print(const Cstring *cs) { printf("%s\n", cs->data); }
 
 void shift_elems_left(Cstring *cs, int start) {
   for (size_t i = start; i < cs->sz - 1; i++) {
@@ -101,27 +100,19 @@ char cstring_pop_front(Cstring *cs) {
   return save;
 }
 
-int cstring_empty(const Cstring *cs) {
-  return cs->sz == 0;
-}
+int cstring_empty(const Cstring *cs) { return cs->sz == 0; }
 
-size_t cstring_cap(const Cstring *cs) {
-  return cs->cap;
-}
+size_t cstring_cap(const Cstring *cs) { return cs->cap; }
 
-size_t cstring_len(const Cstring *cs) {
-  return cs->sz;
-}
+size_t cstring_len(const Cstring *cs) { return cs->sz; }
+
+Cstring cstring_copy(Cstring *cs) { return cstring_create(cs->data); }
 
 char cstring_at(Cstring *cs, int idx) {
   if (idx < 0 || idx >= cs->sz) {
     return '\0';
   }
   return cs->data[idx];
-}
- 
-Cstring cstring_copy(Cstring *cs) {
-  return cstring_create(cs->data);
 }
 
 char *cstring_to_cstr(Cstring *cs, size_t *len) {
@@ -222,7 +213,7 @@ void cstring_from(Cstring *cs, char *data) {
 
 int cstring_has_substr(Cstring *cs, char *substr) {
   size_t len;
-  (void) cstring_substr(cs, substr, &len);
+  (void)cstring_substr(cs, substr, &len);
   return len != -1;
 }
 
@@ -297,6 +288,9 @@ int cstring_eq_cstr(const Cstring *cs, const char *data) {
 }
 
 Cstring cstring_from_range(Cstring *cs, int start, int end) {
+  if ((start < 0 || start > cs->sz) || (end < 0 || end < start)) {
+    PANIC("`start` and `end` must be within the bounds of Cstring.", stderr);
+  }
   Cstring res = cstring_create(NULL);
   for (int i = start; i < end; i++) {
     cstring_push(&res, cs->data[i]);
@@ -315,7 +309,6 @@ void cstring_fill(Cstring *cs, char repl) {
     cs->data[i] = repl;
   }
 }
-
 
 Cstring *cstring_split(Cstring *cs, char delim, size_t *sz) {
   size_t cap = 1;
@@ -373,6 +366,15 @@ void cstring_delall_str(Cstring *cs, char *remove) {
   } while (len != -1);
 }
 
+void cstring_filter(Cstring *cs, int (*func)(char)) {
+  for (size_t i = 0; i < cs->sz; i++) {
+    if (!func(cs->data[i])) {
+      cstring_del_idx(cs, i);
+      i -= 1;
+    }
+  }
+}
+
 void cstring_append(Cstring *cs, char *data) {
   for (size_t i = 0; data[i] != '\0'; i++) {
     cstring_push(cs, data[i]);
@@ -380,7 +382,7 @@ void cstring_append(Cstring *cs, char *data) {
 }
 
 Cstring cstring_create(char *init) {
-  Cstring cs = { 0 };
+  Cstring cs = {0};
   cstring_from(&cs, init);
   return cs;
 }
@@ -390,9 +392,6 @@ void cstring_swap_idx(Cstring *cs, int idx1, int idx2) {
     PANIC("indices must be within the size of the cstring\n", stderr);
   }
   SWAP(cs->data[idx1], cs->data[idx2]);
-  /* char tmp = cs->data[idx1]; */
-  /* cs->data[idx1] = cs->data[idx2]; */
-  /* cs->data[idx2] = tmp; */
 }
 
 void cstring_free(Cstring *cs) {
@@ -400,4 +399,3 @@ void cstring_free(Cstring *cs) {
   cs->cap = 0;
   cs->sz = 0;
 }
-

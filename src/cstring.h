@@ -1,11 +1,16 @@
 #ifndef CSTRING_H
 #define CSTRING_H
 
+#include <stdio.h>
+#include <stdlib.h>
+
 typedef struct {
   char *data;
   size_t sz;
   size_t cap;
 } Cstring;
+
+void cstring_filter(Cstring *cs, int (*func)(char));
 
 // Create a new `Cstring`.
 // When given NULL or "", no data will be added.

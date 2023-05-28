@@ -1,6 +1,6 @@
+#include "cstring.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "cstring.h"
 
 void cstring_example() {
   Cstring cs = cstring_create("Hello");
@@ -91,7 +91,13 @@ void cstring_example() {
   cstring_free(&cs);
 }
 
+int filter(char c) { return c != 'l'; }
+
 int main(void) {
-  cstring_example();
+  // cstring_example();
+  Cstring cs = cstring_create("Hello world!");
+  cstring_print(&cs);
+  cstring_filter(&cs, filter);
+  cstring_print(&cs);
   return 0;
 }
