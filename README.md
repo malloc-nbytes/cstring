@@ -142,6 +142,16 @@ Return an array of `Cstring`s split on `delim`. This function will alter the val
 Cstring *cstring_split(Cstring *cs, char delim, size_t *sz);
 ```
 
+Fill the `Cstring` with a character.
+```
+void cstring_fill(Cstring *cs, char repl);
+```
+
+Fill a range of the `Cstring`.
+```
+void cstring_fill_range(Cstring *cs, char repl, int start, int end);
+```
+
 Create a new `Cstring` from a range of characters in `cs` starting from `start` and ending at `end` - 1.
 ```
 Cstring cstring_from_range(Cstring *cs, int start, int end);

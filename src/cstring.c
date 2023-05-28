@@ -181,6 +181,7 @@ char *cstring_substr(Cstring *cs, char *substr, size_t *len) {
     if (cstring_len(&buff) == n) {
       // Return the start of the substr.
       char *res = &cs->data[i + 1 - n];
+      cstring_free(&buff);
       *len = n;
       return res;
     }
@@ -302,6 +303,19 @@ Cstring cstring_from_range(Cstring *cs, int start, int end) {
   }
   return res;
 }
+
+void cstring_fill_range(Cstring *cs, char repl, int start, int end) {
+  for (int i = start; i <= end; i++) {
+    cs->data[i] = repl;
+  }
+}
+
+void cstring_fill(Cstring *cs, char repl) {
+  for (size_t i = 0; i < cs->sz; i++) {
+    cs->data[i] = repl;
+  }
+}
+
 
 Cstring *cstring_split(Cstring *cs, char delim, size_t *sz) {
   size_t cap = 1;
