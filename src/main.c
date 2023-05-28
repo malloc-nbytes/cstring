@@ -91,8 +91,6 @@ void cstring_example() {
   cstring_free(&cs);
 }
 
-int filter(char c) { return c != 'l'; }
-
 int main(void) {
   // cstring_example();
   Cstring cs = cstring_create("Hello world!");

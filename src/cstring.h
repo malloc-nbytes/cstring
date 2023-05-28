@@ -10,8 +10,6 @@ typedef struct {
   size_t cap;
 } Cstring;
 
-void cstring_filter(Cstring *cs, int (*func)(char));
-
 // Create a new `Cstring`.
 // When given NULL or "", no data will be added.
 Cstring cstring_create(char *init);
@@ -61,6 +59,9 @@ void cstring_delall_str(Cstring *cs, char *remove);
 
 // Delete a character at a given idx.
 void cstring_del_idx(Cstring *cs, int idx);
+
+// Filter the `Cstring` data by giving a function.
+void cstring_filter(Cstring *cs, int (*func)(char));
 
 // Delete all characters matching `del`.
 void cstring_delall_char(Cstring *cs, char del);

@@ -77,6 +77,11 @@ Delete a character at a given idx.
 void cstring_del_idx(Cstring *cs, int idx);
 ```
 
+Filter the `Cstring` data by giving a function.
+```
+void cstring_filter(Cstring *cs, int (*func)(char));
+```
+
 Delete all characters matching `del`.
 ```
 void cstring_delall_char(Cstring *cs, char del);
