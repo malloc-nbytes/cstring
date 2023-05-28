@@ -92,10 +92,6 @@ void cstring_example() {
 }
 
 int main(void) {
-  // cstring_example();
-  Cstring cs = cstring_create("Hello world!");
-  cstring_print(&cs);
-  cstring_filter(&cs, filter);
-  cstring_print(&cs);
+  cstring_example();
   return 0;
 }

@@ -177,9 +177,10 @@ char *cstring_substr(Cstring *cs, char *substr, size_t *len) {
       return res;
     }
   }
-  if (cstring_len(&buff) > 0) {
-    cstring_free(&buff);
-  }
+  // if (cstring_len(&buff) > 0) {
+  //   cstring_free(&buff);
+  // }
+  cstring_free(&buff);
   *len = -1;
   return NULL;
 }
