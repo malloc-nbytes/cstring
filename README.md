@@ -119,12 +119,12 @@ int cstring_eq_cstr(const Cstring *cs, const char *data);
 
 Extract all numbers. Numbers that have more than 10 digits are not accepted.
 ```
-void cstring_numerics(Cstring *cs, int *data, size_t *sz);
+void cstring_numerics(Cstring *cs, int *data, size_t *len);
 ```
 
 Create a new array of integers that are the ascii equivalent in the `Cstring`.
 ```
-int *cstring_to_atoi(Cstring *cs, size_t *sz);
+int *cstring_to_atoi(Cstring *cs, size_t *len);
 ```
 
 Get a character at a given index.
@@ -139,12 +139,12 @@ char *cstring_to_cstr(Cstring *cs, size_t *len);
 
 Return a pointer to the character `delim`. This function will alter the value in `len` to give the resulting pointer length.
 ```
-char *cstring_slice_iter(const Cstring *cs, char delim, size_t *sz);
+char *cstring_slice_iter(const Cstring *cs, char delim, size_t *len);
 ```
 
 Return an array of `Cstring`s split on `delim`. This function will alter the value in `len` to give the resulting pointer length.
 ```
-Cstring *cstring_split(Cstring *cs, char delim, size_t *sz);
+Cstring *cstring_split(Cstring *cs, char delim, size_t *len);
 ```
 
 Fill the `Cstring` with a character.

@@ -92,6 +92,20 @@ void cstring_example() {
 }
 
 int main(void) {
-  cstring_example();
+  // cstring_example();
+
+  Cstring cs = cstring_create("This is a test of the splitting function");
+
+  size_t len;
+  Cstring *arr = cstring_split(&cs, ' ', &len);
+
+  for (size_t i = 0; i < len; i++) {
+    cstring_print(&arr[i]);
+    cstring_free(&arr[i]);
+  }
+
+  free(arr);
+  cstring_free(&cs);
+
   return 0;
 }
