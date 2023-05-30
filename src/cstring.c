@@ -38,16 +38,6 @@ void *s_malloc(size_t nbytes) {
   return p;
 }
 
-void *s_realloc(void *ptr, size_t nbytes) {
-  void *p = realloc(ptr, nbytes);
-  if (!p) {
-    fprintf(stderr, "ERROR: failed to reallocate %zu bytes. Reason: %s\n",
-            nbytes, strerror(errno));
-    exit(EXIT_FAILURE);
-  }
-  return p;
-}
-
 void cstring_realloc(Cstring *cs) {
   cs->data = realloc(cs->data, (cs->cap * 2) + 1);
   if (!cs->data) {
@@ -323,7 +313,12 @@ Cstring *cstring_split(Cstring *cs, char delim, size_t *len) {
     if (c == delim) {
       if (*len >= cap) {
         cap *= 2;
-        res = s_realloc(res, sizeof(res[0]) * cap);
+        res = realloc(res, sizeof(res[0]) * cap);
+        if (!res) {
+          fprintf(stderr, "ERROR: failed to reallocate. Reason: %s\n",
+                  strerror(errno));
+          exit(EXIT_FAILURE);
+        }
       }
       res[*len] = cstring_from_range(cs, ptr, i);
       *len += 1;
