@@ -28,7 +28,7 @@
     (b) = tmp;                                                                 \
   } while (0)
 
-void *s_malloc(size_t nbytes) {
+void *_cstring_malloc(size_t nbytes) {
   void *p = malloc(nbytes);
   if (!p) {
     fprintf(stderr, "ERROR: failed to allocate %zu bytes. Reason: %s\n", nbytes,
@@ -106,7 +106,7 @@ char cstring_at(Cstring *cs, int idx) {
 }
 
 char *cstring_to_cstr(Cstring *cs, size_t *len) {
-  char *data = s_malloc(cs->len + 1);
+  char *data = _cstring_malloc(cs->len + 1);
   strcpy(data, cs->data);
   *len = cs->len;
   return data;
@@ -191,7 +191,7 @@ void cstring_from(Cstring *cs, char *data) {
   if (cs->len > 0) {
     cstring_free(cs);
   }
-  cs->data = s_malloc(sizeof(char) * 2);
+  cs->data = _cstring_malloc(sizeof(char) * 2);
   memset(cs->data, '\0', sizeof(cs->data[0]) * 2);
   cs->cap = 1;
   cs->len = 0;
@@ -210,7 +210,7 @@ int cstring_has_substr(Cstring *cs, char *substr) {
 
 int *cstring_to_atoi(Cstring *cs, size_t *len) {
   *len = 0;
-  int *res = s_malloc(sizeof(int) * cs->len);
+  int *res = _cstring_malloc(sizeof(int) * cs->len);
   for (size_t i = 0; i < cs->len; i++) {
     res[*len] = cs->data[i];
     *len += 1;
@@ -254,7 +254,7 @@ Cstring cstring_from_file(FILE *fp) {
     fseek(fp, 0, SEEK_END);
     length = ftell(fp);
     fseek(fp, 0, SEEK_SET);
-    buffer = s_malloc(length);
+    buffer = _cstring_malloc(length);
     if (buffer) {
       fread(buffer, 1, length, fp);
     }
@@ -303,7 +303,7 @@ void cstring_fill(Cstring *cs, char repl) {
 
 Cstring *cstring_split(Cstring *cs, char delim, size_t *len) {
   size_t cap = 1;
-  Cstring *res = s_malloc(sizeof(Cstring) * cap);
+  Cstring *res = _cstring_malloc(sizeof(Cstring) * cap);
   *len = 0;
 
   int ptr = 0;
