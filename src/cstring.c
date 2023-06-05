@@ -74,9 +74,7 @@ void shift_elems_left(Cstring *cs, int start) {
 }
 
 void cstring_del_idx(Cstring *cs, int idx) {
-  if (idx < 0 || idx >= cs->len) {
-    return;
-  }
+  _check_index(cs, idx)
   shift_elems_left(cs, idx);
 }
 
@@ -107,9 +105,7 @@ size_t cstring_len(const Cstring *cs) { return cs->len; }
 Cstring cstring_copy(Cstring *cs) { return cstring_create(cs->data); }
 
 char cstring_at(Cstring *cs, int idx) {
-  if (idx < 0 || idx >= cs->len) {
-    return '\0';
-  }
+  _check_index(cs, idx);
   return cs->data[idx];
 }
 
