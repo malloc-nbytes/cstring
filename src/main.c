@@ -4,11 +4,11 @@
 #include <stdlib.h>
 
 int main(void) {
-  Cstring cs = cstring_create("HELLO WORLD!");
+  Cstring cs = cstring_create("Hello world!");
 
   cstring_print(&cs);
 
-  cstring_tolower(&cs);
+  cstring_repl_idx(&cs, 'x', 1);
 
   cstring_print(&cs);
 

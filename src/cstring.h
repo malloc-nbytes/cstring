@@ -133,4 +133,13 @@ void cstring_toupper(Cstring *cs);
 // Convert a string to lowercase.
 void cstring_tolower(Cstring *cs);
 
+// Change a value in `cs`.
+void cstring_repl_idx(Cstring *cs, char data, int idx);
+
+// Join two `Cstring`'s together to form a new `Cstring`.
+// It gets merged such that `res = cs1 + join + cs2`.
+// If `join` is NULL, it will be: `res = cs1 + cs2`.
+// This function consumes both `Cstring`'s.
+Cstring cstring_join(Cstring *cs1, Cstring *cs2, char *join);
+
 #endif // CSTRING_H

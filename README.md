@@ -860,3 +860,55 @@ Output:
 HELLO WORLD!
 hello world!
 ```
+
+### `cstring_repl_idx`
+`void cstring_repl_idx(Cstring *cs, char data, int idx);`
+
+Change a value in `cs`.
+
+Example:
+```c
+int main(void) {
+  Cstring cs = cstring_create("Hello world!");
+
+  cstring_print(&cs);
+
+  cstring_repl_idx(&cs, 'x', 1);
+
+  cstring_print(&cs);
+
+  cstring_free(&cs);
+  return 0;
+}
+```
+Output:
+```
+Hello world!
+Hxllo world!
+```
+
+### `cstring_join`
+`Cstring cstring_join(Cstring *cs1, Cstring *cs2, char *join);`
+
+Join two `Cstring`'s together to form a new `Cstring`. It gets merged such that `res = cs1 + join + cs2`. If `join` is NULL, it will be: `res = cs1 + cs2`. This function consumes both `Cstring`'s.
+
+Example:
+```c
+int main(void) {
+  Cstring cs1 = cstring_create("Hello world!");
+  Cstring cs2 = cstring_create("Foo bar baz.");
+
+  Cstring merged = cstring_join(&cs1, &cs2, " ;;; ");
+
+  cstring_print(&merged);
+
+  cstring_free(&merged);
+  return 0;
+}
+```
+Output:
+```
+Hello world! ;;; Foo bar baz.
+```
+
+

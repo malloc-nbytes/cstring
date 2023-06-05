@@ -29,6 +29,13 @@
     (b) = tmp;                                                                 \
   } while (0)
 
+
+void _check_index(Cstring *cs, int idx) {
+  if (idx < 0 || idx >= cs->len) {
+    PANIC("indices must be within the size of the cstring\n", stderr);
+  }
+}
+
 void *_cstring_malloc(size_t nbytes) {
   void *p = malloc(nbytes);
   if (!p) {
@@ -405,10 +412,25 @@ Cstring cstring_create(char *init) {
 }
 
 void cstring_swap_idx(Cstring *cs, int idx1, int idx2) {
-  if ((idx1 < 0 || idx1 >= cs->len) || (idx2 < 0 || idx2 >= cs->len)) {
-    PANIC("indices must be within the size of the cstring\n", stderr);
-  }
+  _check_index(cs, idx1);
+  _check_index(cs, idx2);
   SWAP(cs->data[idx1], cs->data[idx2]);
+}
+
+void cstring_repl_idx(Cstring *cs, char data, int idx) {
+  _check_index(cs, idx);
+  cs->data[idx] = data;
+}
+
+Cstring cstring_join(Cstring *cs1, Cstring *cs2, char *join) {
+  Cstring res = cstring_create(cs1->data);
+  if (join) {
+    cstring_append(&res, join);
+  }
+  cstring_append(&res, cs2->data);
+  cstring_free(cs1);
+  cstring_free(cs2);
+  return res;
 }
 
 void cstring_free(Cstring *cs) {
