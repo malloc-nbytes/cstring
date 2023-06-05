@@ -445,3 +445,418 @@ Output:
 wor
 ```
 
+### 'cstring_eq_cstring'
+`int cstring_eq_cstring(const Cstring *cs, const Cstring *cs2);`
+
+`strcmp()` on two `Cstring`'s.
+
+Example:
+```c
+int main(void) {
+  Cstring cs1 = cstring_create("Hello world!");
+  Cstring cs2 = cstring_create("Hello world!");
+
+  printf("%s\n", cstring_eq_cstring(&cs1, &cs2) == 0
+         ? "same" : "different");
+
+  cstring_free(&cs1);
+  cstring_free(&cs2);
+  return 0;
+}
+```
+Output:
+```
+same
+```
+
+### `cstring_eq_cstr`
+`int cstring_eq_cstr(const Cstring *cs, const char *data);`
+
+`strcmp()` on a `Cstring` and a `char *`.
+
+Example:
+
+```c
+int main(void) {
+  Cstring cs = cstring_create("Hello world!");
+  char *s = "Hello world!";
+
+  printf("%s\n", cstring_eq_cstr(&cs, s) == 0
+         ? "same" : "different");
+
+  cstring_free(&cs);
+  return 0;
+}
+```
+Output:
+```
+same
+```
+
+### `cstring_numerics`
+`void cstring_numerics(Cstring *cs, int *data, size_t *len);`
+
+Extract all numbers. Numbers that have more than 10 digits are not accepted.
+
+Example:
+```c
+int main(void) {
+  Cstring cs = cstring_create("Hello32 wo199rld4!");
+
+  size_t len;
+  int *nums = malloc(sizeof(int) * 3);
+
+  cstring_numerics(&cs, nums, &len);
+
+  for (size_t i = 0; i < len; i++) {
+    printf("%d\n", nums[i]);
+  }
+
+  cstring_free(&cs);
+  free(nums);
+  return 0;
+}
+```
+Output:
+```
+32
+199
+4
+```
+
+### `cstring_to_atoi`
+`int *cstring_to_atoi(Cstring *cs, size_t *len);`
+
+Create a new array of integers that are the ascii equivalent in the `Cstring`.
+
+Example:
+```c
+int main(void) {
+  Cstring cs = cstring_create("Hello world!");
+
+  size_t len;
+  int *nums = cstring_to_atoi(&cs, &len);
+
+  for (size_t i = 0; i < len; i++) {
+    printf("%d\n", nums[i]);
+  }
+
+  cstring_free(&cs);
+  free(nums);
+  return 0;
+}
+```
+Output:
+```
+72
+101
+108
+108
+111
+32
+119
+111
+114
+108
+100
+33
+```
+
+### `cstring_at`
+`char cstring_at(Cstring *cs, int idx);`
+
+Get a character at a given index.
+
+Example:
+```c
+int main(void) {
+  Cstring cs = cstring_create("Hello world!");
+
+  char c = cstring_at(&cs, 4);
+
+  printf("%c\n", c);
+
+  cstring_free(&cs);
+  return 0;
+}
+```
+Output:
+```
+o
+```
+
+### `cstring_to_cstr`
+`char *cstring_to_cstr(Cstring *cs, size_t *len);`
+
+Convert a `Cstring` to `char *`.
+
+Example:
+```c
+int main(void) {
+  Cstring cs = cstring_create("Hello world!");
+
+  size_t len;
+  char *s = cstring_to_cstr(&cs, &len);
+
+  for (size_t i = 0; i < len; i++) {
+    putchar(s[i]);
+  }
+  putchar('\n');
+
+  cstring_free(&cs);
+  free(s);
+  return 0;
+}
+```
+Output:
+```
+Hello world!
+```
+
+### `cstring_slice_iter`
+`char *cstring_slice_iter(const Cstring *cs, char delim, size_t *len);`
+
+Return a pointer to the character `delim`. This function will alter the value in `len` to give the resulting pointer length.
+
+Example:
+```c
+int main(void) {
+  Cstring cs = cstring_create("Hello world!");
+
+  size_t len;
+  char *slice = cstring_slice_iter(&cs, ' ', &len);
+
+  for (size_t i = 0; i < len; i++) {
+    putchar(slice[i]);
+  }
+  putchar('\n');
+
+  cstring_free(&cs);
+  return 0;
+}
+```
+Output:
+```
+ world!
+```
+
+### `cstring_split`
+`Cstring *cstring_split(Cstring *cs, char delim, size_t *len);`
+
+Return an array of `Cstring`s split on `delim`. This function will alter the value in `len` to give the resulting pointer length.
+
+Example:
+```c
+int main(void) {
+  Cstring cs = cstring_create("Hello world, foo bar baz, some more text.");
+
+  size_t len;
+  Cstring *arr = cstring_split(&cs, ' ', &len);
+
+  for (size_t i = 0; i < len; i++) {
+    cstring_print(&arr[i]);
+    cstring_free(&arr[i]);
+  }
+
+  cstring_free(&cs);
+  free(arr);
+  return 0;
+}
+```
+Output:
+```
+Hello
+world,
+foo
+bar
+baz,
+some
+more
+text.
+```
+
+### `cstring_from_range`
+`Cstring cstring_from_range(Cstring *cs, int start, int end);`
+
+Create a new `Cstring` from a range of characters in `cs` starting from `start` and ending at `end` - 1.
+
+Example:
+```c
+int main(void) {
+  Cstring cs = cstring_create("Hello world");
+
+  Cstring range = cstring_from_range(&cs, 6, 11);
+
+  cstring_print(&range);
+
+  cstring_free(&cs);
+  cstring_free(&range);
+  return 0;
+}
+```
+Output:
+```
+world
+```
+
+### `cstring_fill`
+`void cstring_fill(Cstring *cs, char repl);`
+
+Fill the `Cstring` with a character.
+
+```c
+int main(void) {
+  Cstring cs = cstring_create("Hello world");
+
+  cstring_fill(&cs, '*');
+
+  cstring_print(&cs);
+
+  cstring_free(&cs);
+  return 0;
+}
+```
+Output:
+```
+***********
+```
+
+### `cstring_fill_range`
+`void cstring_fill_range(Cstring *cs, char repl, int start, int end);`
+
+Fill a range of the `Cstring`.
+
+Example:
+```c
+int main(void) {
+  Cstring cs = cstring_create("Hello world");
+
+  cstring_fill_range(&cs, '*', 0, 5);
+
+  cstring_print(&cs);
+
+  cstring_free(&cs);
+  return 0;
+}
+```
+Output:
+```
+******world
+```
+
+### `cstring_cap`
+`size_t cstring_cap(const Cstring *cs);`
+
+Get the `Cstring` capacity.
+
+Example:
+```c
+int main(void) {
+  Cstring cs = cstring_create("Hello world");
+
+  printf("%zu\n", cstring_cap(&cs));
+
+  cstring_free(&cs);
+  return 0;
+}
+```
+Output:
+```
+16777216
+```
+
+### `cstring_len`
+`size_t cstring_len(const Cstring *cs);`
+
+Get the `Cstring` length.
+
+```c
+int main(void) {
+  Cstring cs = cstring_create(NULL);
+
+  for (int i = 0; i < 10000000; i++) {
+    cstring_push(&cs, 'a');
+  }
+
+  printf("%zu\n", cstring_len(&cs));
+
+  cstring_free(&cs);
+  return 0;
+}
+```
+Output:
+```
+10000000
+```
+
+### `cstring_empty`
+`int cstring_empty(const Cstring *cs);`
+
+
+Check to see if a `Cstring` is empty.
+
+Example:
+```c
+int main(void) {
+  Cstring cs = cstring_create("Hello world!");
+
+  while (!cstring_empty(&cs)) {
+    cstring_pop(&cs);
+  }
+
+  cstring_free(&cs);
+  return 0;
+}
+```
+
+### `cstring_toupper`
+`void cstring_toupper(Cstring *cs);`
+
+Convert a string to uppercase.
+
+Example:
+```c
+int main(void) {
+  Cstring cs = cstring_create("Hello world!");
+
+  cstring_print(&cs);
+
+  cstring_toupper(&cs);
+
+  cstring_print(&cs);
+
+  cstring_free(&cs);
+  return 0;
+}
+```
+Output:
+```
+Hello world!
+HELLO WORLD!
+```
+
+### `cstring_tolower`
+`void cstring_tolower(Cstring *cs);`
+
+Convert a string to lowercase.
+
+Example:
+```c
+int main(void) {
+  Cstring cs = cstring_create("HELLO WORLD!");
+
+  cstring_print(&cs);
+
+  cstring_tolower(&cs);
+
+  cstring_print(&cs);
+
+  cstring_free(&cs);
+  return 0;
+}
+```
+Output:
+```
+HELLO WORLD!
+hello world!
+```

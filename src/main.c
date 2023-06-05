@@ -4,15 +4,13 @@
 #include <stdlib.h>
 
 int main(void) {
-  Cstring cs = cstring_create("Hello world!");
+  Cstring cs = cstring_create("HELLO WORLD!");
 
-  size_t len;
-  char *substr = cstring_substr(&cs, "wor", &len);
+  cstring_print(&cs);
 
-  for (size_t i = 0; i < len; i++) {
-    putchar(substr[i]);
-  }
-  putchar('\n');
+  cstring_tolower(&cs);
+
+  cstring_print(&cs);
 
   cstring_free(&cs);
   return 0;
