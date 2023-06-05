@@ -911,4 +911,34 @@ Output:
 Hello world! ;;; Foo bar baz.
 ```
 
+### `cstring_alter`
+`void cstring_alter(Cstring *cs, void (*alter_func)(char *));`
 
+Apply `alter_func` on the underlying `char *` data.
+
+Example:
+```c
+void alter_func(char *data) {
+  for (int i = 0; data[i] != '\0'; i++) {
+    data[i] = 'x';
+  }
+}
+
+int main(void) {
+  Cstring cs = cstring_create("Hello world!");
+
+  cstring_print(&cs);
+
+  cstring_alter(&cs, alter_func);
+
+  cstring_print(&cs);
+
+  cstring_free(&cs);
+  return 0;
+}
+```
+Output:
+```
+Hello world!
+xxxxxxxxxxxx
+```

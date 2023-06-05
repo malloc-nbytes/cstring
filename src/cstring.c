@@ -74,7 +74,7 @@ void shift_elems_left(Cstring *cs, int start) {
 }
 
 void cstring_del_idx(Cstring *cs, int idx) {
-  _check_index(cs, idx)
+  _check_index(cs, idx);
   shift_elems_left(cs, idx);
 }
 
@@ -427,6 +427,10 @@ Cstring cstring_join(Cstring *cs1, Cstring *cs2, char *join) {
   cstring_free(cs1);
   cstring_free(cs2);
   return res;
+}
+
+void cstring_alter(Cstring *cs, void (*alter_func)(char *)) {
+  alter_func(cs->data);
 }
 
 void cstring_free(Cstring *cs) {

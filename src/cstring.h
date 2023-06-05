@@ -142,4 +142,7 @@ void cstring_repl_idx(Cstring *cs, char data, int idx);
 // This function consumes both `Cstring`'s.
 Cstring cstring_join(Cstring *cs1, Cstring *cs2, char *join);
 
+// Apply `alter_func` on the underlying `char *` data.
+void cstring_alter(Cstring *cs, void (*alter_func)(char *));
+
 #endif // CSTRING_H
