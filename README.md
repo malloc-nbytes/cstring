@@ -912,14 +912,14 @@ Hello world! ;;; Foo bar baz.
 ```
 
 ### `cstring_alter`
-`void cstring_alter(Cstring *cs, void (*alter_func)(char *));`
+`void cstring_alter(Cstring *cs, void (*alter_func)(char *data, size_t *len, size_t *cap));`
 
-Apply `alter_func` on the underlying `char *` data.
+Apply `alter_func` on the underlying `char *` data. If you do anything that would alter the `Cstring` length, be sure to update `len` and/or `cap`.
 
 Example:
 ```c
-void alter_func(char *data) {
-  for (int i = 0; data[i] != '\0'; i++) {
+void alter_func(char *data, size_t *len, size_t *cap) {
+  for (int i = 0; i < *len; i++) {
     data[i] = 'x';
   }
 }

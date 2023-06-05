@@ -429,8 +429,8 @@ Cstring cstring_join(Cstring *cs1, Cstring *cs2, char *join) {
   return res;
 }
 
-void cstring_alter(Cstring *cs, void (*alter_func)(char *)) {
-  alter_func(cs->data);
+void cstring_alter(Cstring *cs, void (*alter_func)(char *data, size_t *len, size_t *cap)) {
+  alter_func(cs->data, &cs->len, &cs->cap);
 }
 
 void cstring_free(Cstring *cs) {

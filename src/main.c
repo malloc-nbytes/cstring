@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void alter_func(char *data) {
-  for (int i = 0; data[i] != '\0'; i++) {
+void alter_func(char *data, size_t *len, size_t *cap) {
+  for (int i = 0; i < *len; i++) {
     data[i] = 'x';
   }
 }
