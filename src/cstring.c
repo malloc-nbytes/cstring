@@ -1,6 +1,7 @@
 #include "cstring.h"
 #include <assert.h>
 #include <ctype.h>
+#include <ctype.h>
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -367,6 +368,26 @@ void cstring_filter(Cstring *cs, int (*func)(char)) {
     if (!func(cs->data[i])) {
       cstring_del_idx(cs, i);
       i -= 1;
+    }
+  }
+}
+
+void cstring_toupper(Cstring *cs) {
+  for (size_t i = 0; i < cs->len; i++) {
+    char c = cs->data[i];
+    if (isalpha(c) && islower(c)) {
+      cs->data[i] -= 'a';
+      cs->data[i] += 'A';
+    }
+  }
+}
+
+void cstring_tolower(Cstring *cs) {
+  for (size_t i = 0; i < cs->len; i++) {
+    char c = cs->data[i];
+    if (isalpha(c) && isupper(c)) {
+      cs->data[i] -= 'A';
+      cs->data[i] += 'a';
     }
   }
 }

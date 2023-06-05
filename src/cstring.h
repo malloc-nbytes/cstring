@@ -127,4 +127,10 @@ size_t cstring_len(const Cstring *cs);
 // Check to see if a `Cstring` is empty.
 int cstring_empty(const Cstring *cs);
 
+// Convert a string to uppercase.
+void cstring_toupper(Cstring *cs);
+
+// Convert a string to lowercase.
+void cstring_tolower(Cstring *cs);
+
 #endif // CSTRING_H
