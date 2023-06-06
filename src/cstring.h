@@ -21,7 +21,7 @@ Cstring cstring_join(Cstring *cs1, Cstring *cs2, char *join);
 void cstring_print(const Cstring *cs);
 char cstring_at(Cstring *cs, int idx);
 
-// Alter //
+// Mutation //
 void cstring_free(Cstring *cs);
 void cstring_from(Cstring *cs, char *data);
 void cstring_append(Cstring *cs, char *data);
