@@ -64,7 +64,13 @@ void cstring_push(Cstring *cs, char c) {
   cs->data[cs->len++] = c;
 }
 
-void cstring_print(const Cstring *cs) { printf("%s\n", cs->data); }
+void cstring_print(const Cstring *cs) {
+  printf("%s\n", cs->data);
+}
+
+void cstring_fprint(const Cstring *cs, FILE *stream) {
+  fprintf(stream, "%s\n", cs->data);
+}
 
 void shift_elems_left(Cstring *cs, int start) {
   for (size_t i = start; i < cs->len - 1; i++) {

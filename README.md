@@ -81,6 +81,25 @@ Output;
 Hello world
 ```
 
+### `cstring_fprint`
+`void cstring_fprint(const Cstring *cs, FILE *stream);`
+
+Print the contents to `stream`.
+
+Example:
+```c
+int main(void) {
+  Cstring cs = cstring_create("Hello world!");
+  cstring_fprint(&cs, stdout);
+  cstring_free(&cs);
+  return 0;
+}
+```
+Output:
+```
+Hello world!
+```
+
 ### `cstring_free`
 `void cstring_free(Cstring *cs);`
 

@@ -19,6 +19,7 @@ Cstring cstring_join(Cstring *cs1, Cstring *cs2, char *join);
 
 // Lookup //
 void cstring_print(const Cstring *cs);
+void cstring_fprint(const Cstring *cs, FILE *stream);
 char cstring_at(Cstring *cs, int idx);
 
 // Mutation //
@@ -63,3 +64,5 @@ size_t cstring_len(const Cstring *cs);
 // Other //
 int *cstring_to_atoi(Cstring *cs, size_t *len);
 Cstring *cstring_split(Cstring *cs, char delim, size_t *len);
+
+#endif // CSTRING_H
