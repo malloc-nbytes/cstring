@@ -445,7 +445,7 @@ Output:
 wor
 ```
 
-### 'cstring_eq_cstring'
+### `cstring_eq_cstring`
 `int cstring_eq_cstring(const Cstring *cs, const Cstring *cs2);`
 
 `strcmp()` on two `Cstring`'s.
