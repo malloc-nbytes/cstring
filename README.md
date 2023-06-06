@@ -1,6 +1,6 @@
 # cstring
 
-Provides a string struct with helpful functions.
+Provides an easier way of working with strings in C.
 
 ## Functions Overview
 
