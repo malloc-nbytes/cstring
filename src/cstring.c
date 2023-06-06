@@ -116,7 +116,7 @@ char *cstring_to_cstr(Cstring *cs, size_t *len) {
   return data;
 }
 
-void cstring_reverse(Cstring *cs) {
+void cstring_rev(Cstring *cs) {
   int start = 0, tmp, end = cs->len - 1;
   while (start < end) {
     tmp = cs->data[start];

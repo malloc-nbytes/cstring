@@ -162,8 +162,8 @@ Output:
 Hello world
 ```
 
-### `cstring_reverse`
-`void cstring_reverse(Cstring *cs);`
+### `cstring_rev`
+`void cstring_rev(Cstring *cs);`
 
 Reverse characters.
 
@@ -171,7 +171,7 @@ Example:
 ```c
 int main(void) {
   Cstring cs = cstring_create("Hello world");
-  cstring_reverse(&cs);
+  cstring_rev(&cs);
   cstring_print(&cs);
   cstring_free(&cs);
   return 0;

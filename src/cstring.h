@@ -39,7 +39,7 @@ void cstring_trim(Cstring *cs);
 Cstring cstring_copy(Cstring *cs);
 
 // Reverse characters.
-void cstring_reverse(Cstring *cs);
+void cstring_rev(Cstring *cs);
 
 // Push a character.
 void cstring_push(Cstring *cs, char c);
