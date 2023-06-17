@@ -110,7 +110,12 @@ size_t cstring_len(const Cstring *cs) { return cs->len; }
 
 Cstring cstring_copy(Cstring *cs) { return cstring_create(cs->data); }
 
-char cstring_at(Cstring *cs, int idx) {
+char *cstring_at(Cstring *cs, int idx) {
+  _check_index(cs, idx);
+  return &cs->data[idx];
+}
+
+char cstring_getchar(Cstring *cs, int idx) {
   _check_index(cs, idx);
   return cs->data[idx];
 }

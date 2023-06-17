@@ -582,16 +582,39 @@ Output:
 ```
 
 ### `cstring_at`
-`char cstring_at(Cstring *cs, int idx);`
+`char *cstring_at(Cstring *cs, int idx);`
 
-Get a character at a given index.
+Get the address to a character at a given index.
 
 Example:
 ```c
 int main(void) {
   Cstring cs = cstring_create("Hello world!");
 
-  char c = cstring_at(&cs, 4);
+  *cstring_at(&cs, 0) = 'x';
+
+  cstring_print(&cs);
+
+  cstring_free(&cs);
+  return 0;
+}
+```
+Output:
+```
+xello world!
+```
+
+### `cstring_getchar`
+`char *cstring_getchar(Cstring *cs, int idx);`
+
+Get the character at a given index.
+
+Example:
+```c
+int main(void) {
+  Cstring cs = cstring_create("Hello world!");
+
+  char c = cstring_getchar(&cs, 0);
 
   printf("%c\n", c);
 
@@ -601,7 +624,7 @@ int main(void) {
 ```
 Output:
 ```
-o
+H
 ```
 
 ### `cstring_to_cstr`

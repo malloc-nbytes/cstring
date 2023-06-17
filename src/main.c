@@ -5,7 +5,11 @@
 
 int main(void) {
   Cstring cs = cstring_create("Hello world!");
-  cstring_fprint(&cs, stdout);
+
+  char c = cstring_getchar(&cs, 0);
+
+  printf("%c\n", c);
+
   cstring_free(&cs);
   return 0;
 }

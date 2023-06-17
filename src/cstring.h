@@ -20,7 +20,8 @@ Cstring cstring_join(Cstring *cs1, Cstring *cs2, char *join);
 // Lookup //
 void cstring_print(const Cstring *cs);
 void cstring_fprint(const Cstring *cs, FILE *stream);
-char cstring_at(Cstring *cs, int idx);
+char cstring_getchar(Cstring *cs, int idx);
+char *cstring_at(Cstring *cs, int idx);
 
 // Mutation //
 void cstring_free(Cstring *cs);
